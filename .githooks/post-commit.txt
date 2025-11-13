@@ -1,0 +1,13 @@
+#!/bin/sh
+echo "Creating backup..."
+BACKUP_DIR="../backup"
+BACKUP_FILE="$BACKUP_DIR/repo-backup.bundle"
+mkdir -p "$BACKUP_DIR"
+
+if [ -f "$BACKUP_FILE" ]; then
+  rm "$BACKUP_FILE"
+  echo "Old backup removed."
+fi
+
+git bundle create "$BACKUP_FILE" --all
+echo "Backup saved to $BACKUP_FILE"

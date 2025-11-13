@@ -1,0 +1,15 @@
+ #!/bin/sh
+
+# Go linter
+if find . -name "*.go" | grep -q .; then
+  echo "Go files found, running golangci-lint..."
+  golangci-lint run ./...
+  if [ $? -ne 0 ]; then
+    echo "Go linting failed! Commit aborted."
+    exit 1
+  fi
+else
+  echo "No Go files found, skipping Go lint."
+fi
+
+

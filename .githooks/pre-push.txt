@@ -1,0 +1,27 @@
+#!/bin/sh
+
+echo "Checking for Go files..."
+if [ -f "go.mod" ] || [ -n "$(find . -name '*_test.go')" ]; then
+  echo "Running Go tests..."
+  go test ./...
+  if [ $? -ne 0 ]; then
+    echo "Go tests failed! Push aborted."
+    exit 1
+  fi
+else
+  echo "No Go module or test files found, skipping Go tests."
+fi
+
+echo "Checking for Python tests..."
+if command -v pytest >/dev/null 2>&1 && [ -n "$(find . -name 'test_*.py' -o -name '*_test.py')" ]; then
+  echo "Running Python tests..."
+  pytest
+  if [ $? -ne 0 ]; then
+    echo "Python tests failed! Push aborted."
+    exit 1
+  fi
+else
+  echo "No pytest installed or no Python test files found, skipping Python tests."
+fi
+
+echo "✅ All tests passed or skipped!"
